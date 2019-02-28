@@ -5,7 +5,7 @@ using Plots
 
 export reflektion
 export Video
-
+export pruefe_e
 
 function reflektion(alpha,gamma)
     if ~(alpha >= 0 && alpha <= pi)
@@ -56,7 +56,29 @@ function Video(t,gamma)
     plot!([-1.5;1.5],[0;0], linestyle = :dot, color = :black, seriestype = :path, label = "Boden")
 end
 
-
+function pruefe_e(berechne_e)
+    a1 = pi/5;
+    t1 = berechne_e(2,a1,(pi/2+a1)/2);
+    MU1 = 2*cos((pi/2+a1)/2 - a1);
+    a2 = pi/3;
+    t2 = berechne_e(2,a2,(pi/2+a2)/2);
+    MU2 = 2*cos((pi/2+a2)/2 - a2);
+    a3 = 2*pi/3;
+    t3 = berechne_e(3,a3,(pi/2+a3)/2);
+    MU3 = 3*cos((pi/2+a3)/2 - a3);
+    a4 = 6*pi/7;
+    t4 = berechne_e(2,a4,(pi/2+a4)/2);
+    MU4 = 2*cos((pi/2+a4)/2 - a4);   
+        
+    eps = 0.00001;
+    t = [t1, t2, t3, t4];
+    MU = [MU1, MU2, MU3, MU4];
+    if maximum(abs.(t - MU)) > eps
+        @warn "Die Formel zur Berechnung von e ist nicht korrekt!"
+    else
+        println("Deine Formel scheint korrekt zu sein!")
+    end
+end
 
 
 
