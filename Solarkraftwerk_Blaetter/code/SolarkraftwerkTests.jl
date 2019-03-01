@@ -6,6 +6,8 @@ using Plots
 export reflektion
 export Video
 export pruefe_e
+export pruefe_e1e2e3
+export pruefe_P_M
 
 function reflektion(alpha,gamma)
     if ~(alpha >= 0 && alpha <= pi)
@@ -23,7 +25,7 @@ function reflektion(alpha,gamma)
     beta = alpha+2*(gamma-alpha);
     v1 = cos(beta);
     v2 = sin(beta);
-    plot([0;y1],[0;y2], seriestype = :path, color = :red, linewidth = 4, xlims = (-1.5,1.5), ylims = (-.5,1.5), label = "einfallender Strahl")
+    plot([0;y1],[0;y2], seriestype = :path, color = :red, linewidth = 4, xlims = (-1.5,1.5), ylims = (-.5,1.5), label = "einfallender Strahl", title = "Strahlengang für alpha = $(alpha/pi*180) Grad")
     plot!([0;0.25*z1],[0;0.25*z2], color = :black, seriestype = :path, label = "Spiegelnormale")
     plot!([0.25*z2;-0.25*z2],[-0.25*z1;0.25*z1], color = :black, linewidth = 4, seriestype = :path, label = "Spiegel")
     plot!([0;v1],[0;v2],color = :green, linewidth = 4; seriestype = :path, label = "reflektierter Strahl")
@@ -48,7 +50,7 @@ function Video(t,gamma)
     beta = alpha+2*(gamma-alpha);
     v1 = cos(beta);
     v2 = sin(beta);
-    plot([0;y1],[0;y2], seriestype = :path, color = :red, linewidth = 4, xlims = (-1.5,1.5), ylims = (-.5,1.5), label = "einfallender Strahl")
+    plot([0;y1],[0;y2], seriestype = :path, color = :red, linewidth = 4, xlims = (-1.5,1.5), ylims = (-.5,1.5), label = "einfallender Strahl", title = "Strahlengang zur Zeit t = $(t)")
     plot!([0;0.25*z1],[0;0.25*z2], color = :black, seriestype = :path, label = "Spiegelnormale")
     plot!([0.25*z2;-0.25*z2],[-0.25*z1;0.25*z1], color = :black, linewidth = 4, seriestype = :path, label = "Spiegel")
     plot!([0;v1],[0;v2],color = :green, linewidth = 4; seriestype = :path, label = "reflektierter Strahl")
@@ -80,7 +82,51 @@ function pruefe_e(berechne_e)
     end
 end
 
+function pruefe_e1e2e3(e1, e2, e3)
+    e1MU = 1.1*cos((pi/2+20/180*pi)/2 - 20/180*pi);
+    e2MU = 1.1*cos((pi/2+pi/2)/2 - pi/2);
+    e3MU = 1.1*cos((pi/2+130/180*pi)/2 - 130/180*pi);
+    
+    eps = 0.00001;
+    if abs(e1 - e1MU) > eps
+        @warn "Dein Ergebnis für e1 ist falsch!"
+    end
+    if abs(e2 - e2MU) > eps
+        @warn "Dein Ergebnis für e2 ist falsch!"
+    end
+    if abs(e3 - e3MU) > eps
+        @warn "Dein Ergebnis für e3 ist falsch!"
+    end
+    e = [e1, e2, e3];
+    MU = [e1MU, e2MU, e3MU];
+    if maximum(abs.(e-MU)) <= eps
+        println("e1 = $(e1) \ne2 = $(e2) \ne3 = $(e3)")
+    end
+end
 
+function pruefe_P_M(berechne_P_M)
+    PS1 = 700;
+    a1 = pi/4;
+    PM1 = berechne_P_M(PS1, a1);
+    PM1MU = PS1 * 1.1 * cos((pi/2+a1)/2 - a1);
+    PS2 = 500;
+    a2 = pi/8;
+    PM2 = berechne_P_M(PS2, a2);
+    PM2MU = PS2 * 1.1 * cos((pi/2+a2)/2 - a2);    
+    PS3 = 896;
+    a3 = 7*pi/8;
+    PM3 = berechne_P_M(PS3, a3);
+    PM3MU = PS3 * 1.1 * cos((pi/2+a3)/2 - a3);    
+    
+    eps = 0.00001;
+    PM = [PM1, PM2, PM3];
+    MU = [PM1MU, PM2MU, PM3MU];
+    if maximum(abs.(PM - MU)) > eps
+        @warn "Die Formel zur Berechnung von P_M ist nicht korrekt!"
+    else
+        println("Deine Formel scheint korrekt zu sein!")
+    end
+end
 
 end
 
