@@ -8,6 +8,7 @@ export Video
 export pruefe_e
 export pruefe_e1e2e3
 export pruefe_P_M
+export pruefe_PMt
 
 function reflektion(alpha,gamma)
     if ~(alpha >= 0 && alpha <= pi)
@@ -127,6 +128,40 @@ function pruefe_P_M(berechne_P_M)
         println("Deine Formel scheint korrekt zu sein!")
     end
 end
+
+function pruefe_PMt(berechne_P_M_t)
+    t = [8; 10; 12; 14; 16; 18];
+    s = 1.1;
+    alpha = (14.2076 .+ 15.221 .* (t .- 8)) .* pi/180;
+    gamma = (alpha .+ pi/2) ./ 2;
+    e =  s .* cos.(gamma .- alpha);
+    P_S = (- 3580.0058) .+ 696.1063 .* t .- 26.8157 .* t.^2;
+    P_MMU = P_S .* e;
+    P_M = berechne_P_M_t.(t);
+    eps = 0.00001;
+    if maximum(abs.(P_M - P_MMU)) > eps
+		@warn "Deine Formel zur Berechnung von P_M ist falsch! Korrigiere sie. Eventuell ist der Fehler auch in der Funktion `berechne_P_S` zu finden."
+        else 
+        t = range(7.07, stop = 18.89, length = 1000);
+        y = berechne_P_M_t.(t);
+        plot(t,y,linewidth = 3, title = "Leistung am Spiegel im Tagesverlauf", xlabel = "Zeit t (in Stunden nach Tagesbeginn)", ylabel = "P_M (in Watt)", label = "")
+    end
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 end
 
