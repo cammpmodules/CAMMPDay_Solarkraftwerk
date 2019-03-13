@@ -9,6 +9,9 @@ export pruefe_e
 export pruefe_e1e2e3
 export pruefe_P_M
 export pruefe_PMt
+export pruefe_A0
+export pruefe_A
+export pruefe_A1A2A3
 
 function reflektion(alpha,gamma)
     if ~(alpha >= 0 && alpha <= pi)
@@ -18,6 +21,8 @@ function reflektion(alpha,gamma)
     eps = 0.00001;
     if abs(gamma-gammaML) > eps
 		@warn "Deine Formel zur Berechnung von gamma ist falsch! Korrigiere sie in Teil b)."
+    else
+        println("Es ist gamma = $(gamma/pi*180) Grad.")
     end
     y1 = cos(alpha);
     y2 = sin(alpha);
@@ -43,6 +48,8 @@ function Video(t,gamma)
     eps = 0.00001;
     if abs(gamma-gammaML) > eps
 		@warn "Deine Formel zur Berechnung von gamma ist falsch! Korrigiere sie. Eventuell ist der Fehler auch in den Funktionen `berechne_alpha` oder `grad2rad` zu finden."
+    else
+        println("Es gilt alpha = $(alpha/pi*180) Grad und gamma = $(gamma/pi*180) Grad.")
     end
     y1 = cos(alpha);
     y2 = sin(alpha);
@@ -149,12 +156,58 @@ function pruefe_PMt(berechne_P_M_t)
 end
 
 
+function pruefe_A0(berechne_A0)
+    e = [5;6;10;20;3];
+    b = [2;1;4;19;3];
+    A_MU = b./e.*100;
+    A = berechne_A0.(e,b);
+    eps = 0.00001;
+    if maximum(abs.(A_MU - A)) > eps
+		@warn "Deine Formel zur Berechnung von A ist falsch! Korrigiere sie."
+    else 
+        println("Deine Formel scheint korrekt zu sein!")
+    end
+end
+
+function pruefe_A(berechne_A)
+    e = [5;6;10;20;3;2;8];
+    b = [2;1;4;19;3;5;9];
+    A_MU = min.(b./e, ones(7,1))*100;
+    A = berechne_A.(e,b);
+    eps = 0.00001;
+    if maximum(abs.(A_MU - A)) > eps
+		@warn "Deine Formel zur Berechnung von A ist falsch! Korrigiere sie."
+    else 
+        println("Deine Formel scheint korrekt zu sein!")
+    end
+end
 
 
-
-
-
-
+function pruefe_A1A2A3(A1, A2, A3)
+    b = 0.8;
+    e1MU = 1.1*cos((pi/2+35/180*pi)/2 - 35/180*pi);
+    A1MU = min(b/e1MU,1)*100;
+    e2MU = 1.1*cos((pi/2+95/180*pi)/2 - 95/180*pi);
+    A2MU = min(b/e2MU,1)*100;
+    e3MU = 1.1*cos((pi/2+175/180*pi)/2 - 175/180*pi);
+    A3MU = min(b/e3MU,1)*100;
+    
+    eps = 0.00001;
+    if abs(A1 - A1MU) > eps
+        @warn "Dein Ergebnis für A1 ist falsch!"
+    end
+    if abs(A2 - A2MU) > eps
+        @warn "Dein Ergebnis für A2 ist falsch!"
+    end
+    if abs(A3 - A3MU) > eps
+        @warn "Dein Ergebnis für A3 ist falsch!"
+    end
+    A = [A1, A2, A3];
+    MU = [A1MU, A2MU, A3MU];
+    if maximum(abs.(A-MU)) <= eps
+        println("A1 = $(A1) \nA2 = $(A2) \nA3 = $(A3) \nDie obigen Ergebnisse kann man qualitativ so erklären: Je spitzer bzw. stumpfer der Einfallswinkel, desto kleiner ist e und desto größer ist b/e.")
+    end
+end
 
 
 
