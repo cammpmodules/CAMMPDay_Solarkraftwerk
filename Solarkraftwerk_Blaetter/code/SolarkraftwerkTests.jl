@@ -12,6 +12,8 @@ export pruefe_PMt
 export pruefe_A0
 export pruefe_A
 export pruefe_A1A2A3
+export pruefe_P_R
+export pruefe_PRt
 
 function reflektion(alpha,gamma)
     if ~(alpha >= 0 && alpha <= pi)
@@ -209,7 +211,40 @@ function pruefe_A1A2A3(A1, A2, A3)
     end
 end
 
+function pruefe_P_R(berechne_P_R)
+    P_M = [1500;1278;789;566];
+    A = [80.5; 77; 94; 60];
+    P_R_MU = A ./ 100 .* P_M
+    P_R = berechne_P_R.(P_M, A);
+    eps = 0.00001;
+    if maximum(abs.(P_R_MU - P_R)) > eps
+		@warn "Deine Formel zur Berechnung von P_M ist falsch! Korrigiere sie."
+    else 
+        println("Deine Formel scheint korrekt zu sein!")
+    end
+end
 
+function pruefe_PRt(berechne_P_R_t)
+    t = [8; 10; 12; 14; 16; 18];
+    s = 1.1;
+    b = 0.8;
+    alpha = (14.2076 .+ 15.221 .* (t .- 8)) .* pi/180;
+    gamma = (alpha .+ pi/2) ./ 2;
+    e =  s .* cos.(gamma .- alpha);
+    P_S = (- 3580.0058) .+ 696.1063 .* t .- 26.8157 .* t.^2;
+    P_M = P_S .* e;
+    A = min.(b ./ e, ones(6,1)).*100;
+    P_RMU = A ./ 100 .* P_M;
+    P_R = berechne_P_R_t.(t);
+    eps = 0.00001;
+    if maximum(abs.(P_R - P_RMU)) > eps
+		@warn "Deine Formel zur Berechnung von P_M ist falsch! Korrigiere sie. Eventuell ist der Fehler auch in den Funktionen `berechne_e_t` oder `berechne_A_t` zu finden."
+        else 
+        t = range(7.07, stop = 18.89, length = 1000);
+        y = berechne_P_R_t.(t);
+        plot(t,y,linewidth = 3, title = "Leistung am Absorberrohr im Tagesverlauf", xlabel = "Zeit t (in Stunden nach Tagesbeginn)", ylabel = "P_R (in Watt)", label = "")
+    end
+end
 
 
 
