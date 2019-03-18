@@ -14,6 +14,7 @@ export pruefe_A
 export pruefe_A1A2A3
 export pruefe_P_R
 export pruefe_PRt
+export pruefe_tmax
 
 function reflektion(alpha,gamma)
     if ~(alpha >= 0 && alpha <= pi)
@@ -242,10 +243,18 @@ function pruefe_PRt(berechne_P_R_t)
         else 
         t = range(7.07, stop = 18.89, length = 1000);
         y = berechne_P_R_t.(t);
-        plot(t,y,linewidth = 3, title = "Leistung am Absorberrohr im Tagesverlauf", xlabel = "Zeit t (in Stunden nach Tagesbeginn)", ylabel = "P_R (in Watt)", label = "")
+        plot(t,y,linewidth = 3, title = "Leistung am Absorberrohr im Tagesverlauf", xlabel = "Zeit t (in Stunden nach Tagesbeginn)", xticks = 7:19, ylabel = "P_R (in Watt)", label = "")
     end
 end
 
+function pruefe_tmax(t_max)
+    eps = 0.00001;
+    if abs(t_max -13) > eps
+		@warn "Deine Eingabe für t_max ist falsch! Korrigiere dich."
+    else 
+        println("Genau, um $(t_max) Uhr arbeitet das Kraftwerk am effektivsten!")
+    end
+end
 
 
 
