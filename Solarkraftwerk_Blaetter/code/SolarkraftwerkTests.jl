@@ -15,6 +15,8 @@ export pruefe_A1A2A3
 export pruefe_P_R
 export pruefe_PRt
 export pruefe_tmax
+export pruefe_beta
+export outbeta
 
 function reflektion(alpha,gamma)
     if ~(alpha >= 0 && alpha <= pi)
@@ -256,8 +258,34 @@ function pruefe_tmax(t_max)
     end
 end
 
+function pruefe_beta(berechne_beta)
+    x = [-1;-2;0;0.6;14.5];
+    h = [4;5;3.5;6;3];
+    
+    function berechne_betaMU(x,h)
+    if (x < 0)
+        beta = atan(h/(-x));
+    elseif (x > 0)
+        beta = pi-atan(h/x);
+    elseif (x == 0)
+        beta = pi/2;
+    end
+    return beta;
+    end
+    
+    beta_MU = berechne_betaMU.(x,h);
+    beta = berechne_beta.(x,h);
+    eps = 0.00001;
+    if maximum(abs.(beta_MU - beta)) > eps
+		@warn "Deine Funktion zur Berechnung von beta ist falsch! Korrigiere sie."
+    else 
+        println("Deine Formel scheint korrekt zu sein!")
+    end
+end
 
-
+function outbeta(x,h,beta)
+    println("Bei einer Spiegelposition von x = $(x) Metern und einer Höhe von h = $(h) Metern ist der Winkel beta gegeben durch \nbeta = $(beta) (= $(beta/pi*180) Grad).")
+end
 
 
 end
