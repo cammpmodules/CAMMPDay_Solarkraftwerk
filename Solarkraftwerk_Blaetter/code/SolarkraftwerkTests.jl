@@ -17,6 +17,7 @@ export pruefe_PRt
 export pruefe_tmax
 export pruefe_beta
 export outbeta
+export pruefe_gamma
 
 function reflektion(alpha,gamma)
     if ~(alpha >= 0 && alpha <= pi)
@@ -284,8 +285,28 @@ function pruefe_beta(berechne_beta)
 end
 
 function outbeta(x,h,beta)
-    println("Bei einer Spiegelposition von x = $(x) Metern und einer Höhe von h = $(h) Metern ist der Winkel beta gegeben durch \nbeta = $(beta) (= $(beta/pi*180) Grad).")
+    if h <= 0
+        println("h muss positiv sein!")
+    else
+        println("Bei einer Spiegelposition von x = $(x) Metern und einer Höhe von h = $(h) Metern ist der gesuchte Winkel gegeben durch \n\nbeta = $(beta) (= $(beta/pi*180) Grad).")
+    end
 end
+
+function pruefe_gamma(berechne_gamma)
+    alpha = rand(5,1) * pi;
+    beta = rand(5,1) * pi;
+    gammaMU = (alpha + beta)/2;
+    gamma = berechne_gamma.(alpha,beta);
+    eps = 0.00001;
+    if maximum(abs.(gammaMU - gamma)) > eps
+		@warn "Deine Funktion zur Berechnung von gamma ist falsch! Korrigiere sie."
+    else 
+        println("Deine Formel scheint korrekt zu sein!")
+    end
+end
+
+
+
 
 
 end
