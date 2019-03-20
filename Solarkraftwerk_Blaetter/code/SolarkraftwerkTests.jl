@@ -18,6 +18,7 @@ export pruefe_tmax
 export pruefe_beta
 export outbeta
 export pruefe_gamma
+export makeplot
 
 function reflektion(alpha,gamma)
     if ~(alpha >= 0 && alpha <= pi)
@@ -305,6 +306,51 @@ function pruefe_gamma(berechne_gamma)
     end
 end
 
+
+function makeplot(x,h,alpha,beta,gamma)
+     if ~(alpha >= 0 && alpha <= pi)
+		@warn "Alpha liegt nicht zwische 0 und pi!"
+    end
+    if h <= 0
+		@warn "h ist nicht positiv!"
+    end
+    
+    if (x < 0)
+        betaMU = atan(h/(-x));
+    elseif (x > 0)
+        betaMU = pi-atan(h/x);
+    elseif (x == 0)
+        betaMU = pi/2;
+    end
+    
+    gammaMU = (alpha + betaMU)/2;
+    eps = 0.00001;
+    if abs(gamma-gammaMU) > eps
+		@warn "Deine Eingabe zur Berechnung von beta und gamma ist falsch! Korrigiere sie."
+    else
+        println("Es ist beta = $(beta/pi*180) Grad und gamma = $(gamma/pi*180) Grad.")
+    end
+    ylength = h+2;
+    xlength = 3*abs(x) + 2;
+    axlength = max(ylength, xlength);
+    l = sqrt((x)^2+(h)^2);
+    y1 = x + 0.95*l*cos(alpha);
+    y2 = 0 + 0.95*l*sin(alpha);
+    z1 = x + 0.15*l*cos(gamma);
+    z2 = 0 + 0.15*l*sin(gamma);
+    v1 = x + 0.95*l*cos(beta);
+    v2 = 0 + 0.95*l*sin(beta);
+    SA1 = x + 0.2*l*cos(gamma+pi/2);
+    SA2 = 0 + 0.2*l*sin(gamma+pi/2);
+    SE1 = x + 0.2*l*cos(gamma-pi/2);
+    SE2 = 0 + 0.2*l*sin(gamma-pi/2);
+    plot([x;y1],[0;y2], seriestype = :path, color = :red, linewidth = 4, xlims = (-axlength/2,axlength/2), ylims = (-1,axlength-1), label = "einfallender Strahl", title = "Strahlengang für alpha = $(alpha/pi*180) Grad", size = (500,500))
+    plot!([x;z1],[0;z2], color = :black, seriestype = :path, label = "Spiegelnormale")
+    plot!([SA1;SE1],[SA2;SE2], color = :black, linewidth = 4, seriestype = :path, label = "Spiegel")
+    plot!([x;v1],[0;v2],color = :green, linewidth = 4; seriestype = :path, label = "reflektierter Strahl")
+    plot!([0],[h], seriestype = :scatter, markersize = 8, label = "Rohr")
+    plot!([-axlength/2,axlength/2],[0;0], linestyle = :dot, color = :black, seriestype = :path, label = "Boden")
+end
 
 
 
