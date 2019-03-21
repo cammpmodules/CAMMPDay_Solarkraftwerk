@@ -330,9 +330,9 @@ function makeplot(x,h,alpha,beta,gamma)
     else
         println("Es ist beta = $(beta/pi*180) Grad und gamma = $(gamma/pi*180) Grad.")
     end
+    xlength = 3*abs(x);
     ylength = h+2;
-    xlength = 3*abs(x) + 2;
-    axlength = max(ylength, xlength);
+    length = max(xlength, ylength);
     l = sqrt((x)^2+(h)^2);
     y1 = x + 0.95*l*cos(alpha);
     y2 = 0 + 0.95*l*sin(alpha);
@@ -344,12 +344,12 @@ function makeplot(x,h,alpha,beta,gamma)
     SA2 = 0 + 0.2*l*sin(gamma+pi/2);
     SE1 = x + 0.2*l*cos(gamma-pi/2);
     SE2 = 0 + 0.2*l*sin(gamma-pi/2);
-    plot([x;y1],[0;y2], seriestype = :path, color = :red, linewidth = 4, xlims = (-axlength/2,axlength/2), ylims = (-1,axlength-1), label = "einfallender Strahl", title = "Strahlengang für alpha = $(alpha/pi*180) Grad", size = (500,500))
-    plot!([x;z1],[0;z2], color = :black, seriestype = :path, label = "Spiegelnormale")
-    plot!([SA1;SE1],[SA2;SE2], color = :black, linewidth = 4, seriestype = :path, label = "Spiegel")
+    plot([x;y1],[0;y2], seriestype = :path, color = :red, linewidth = 4, xlims = (x-length/2, x+length/2); ylims = (-1,length-1), label = "einfallender Strahl", title = "Strahlengang für alpha = $(alpha/pi*180) Grad", size = (500,500))
+    plot!([x;z1],[0;z2], color = :black, seriestype = :path, label="")
+    plot!([SA1;SE1],[SA2;SE2], color = :black, linewidth = 4, seriestype = :path, label = "")
     plot!([x;v1],[0;v2],color = :green, linewidth = 4; seriestype = :path, label = "reflektierter Strahl")
-    plot!([0],[h], seriestype = :scatter, markersize = 8, label = "Rohr")
-    plot!([-axlength/2,axlength/2],[0;0], linestyle = :dot, color = :black, seriestype = :path, label = "Boden")
+    plot!([0],[h], seriestype = :scatter, markersize = 8, label = "")
+    plot!([x-length/2, x+length/2],[0;0], linestyle = :dot, color = :black, seriestype = :path, label = "")
 end
 
 
