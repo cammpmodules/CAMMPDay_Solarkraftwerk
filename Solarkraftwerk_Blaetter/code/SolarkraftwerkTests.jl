@@ -19,6 +19,9 @@ export pruefe_beta
 export outbeta
 export pruefe_gamma
 export makeplot
+export pruefe_e_strich
+export pruefe_a
+export pruefe_PR
 
 function reflektion(alpha,gamma)
     if ~(alpha >= 0 && alpha <= pi)
@@ -352,9 +355,77 @@ function makeplot(x,h,alpha,beta,gamma)
     plot!([x-length/2, x+length/2],[0;0], linestyle = :dot, color = :black, seriestype = :path, label = "")
 end
 
+function pruefe_e_strich(berechne_e_strich)
+    b = 10 * rand(5,1);
+    beta = pi * rand(5,1);
+    eMU = cos.(pi/2 * ones(5,1) - beta) .* b;
+    e = berechne_e_strich.(b, beta);
+    eps = 0.00001;
+    if maximum(abs.(eMU - e)) > eps
+		@warn "Deine Funktion zur Berechnung von e' ist falsch! Korrigiere sie."
+    else 
+        println("Deine Formel scheint korrekt zu sein!")
+    end
+end
+
+function pruefe_a(berechne_a)
+    e = rand(5,1);
+    es = rand(5,1);
+    aMU = min.(ones(5,1),es./e) .* 100;
+    a = berechne_a.(e,es);
+    eps = 0.00001;
+    if maximum(abs.(aMU - a)) > eps
+		@warn "Deine Funktion zur Berechnung von a ist falsch! Korrigiere sie."
+    else 
+        println("Deine Formel scheint korrekt zu sein!")
+    end
+end
+
+function pruefe_PR(berechne_P_R)
+    t = 7 * ones(5,1) + 12 * rand(5,1);
+    x = (-10) * ones(5,1) + 20 * rand(5,1);
+    s = rand(5,1);
+    h = 6 * rand(5,1);
+    b = 0.7 * rand(5,1);
+    
+    alpha = (14.2076 * ones(5,1) + 15.221 * (t - 8 * ones(5,1)))/180*pi;
+    P_S = (-3580.0058) * ones(5,1) + 696.1063 * t - 26.8157 * t.^2;
+    beta = zeros(5,1);
+    for i = 1:5
+        if (x[i] < 0)
+            beta[i] = atan(h[i]/(-x[i]));
+        elseif (x[i] > 0)
+            beta[i] = pi-atan(h[i]/x[i]);
+        elseif (x[i] == 0)
+            beta[i] = pi/2;# Ersetze NaN durch einen Ausdruck für den Winkel beta im Fall x=0
+        end
+    end
+    gamma = (alpha+beta)/2;
+    e = s .* cos.(gamma-alpha);
+    P_M = e .* P_S;
+    es = b .* cos.(pi/2 * ones(5,1) - beta);
+    a = min.(ones(5,1),es./e);
+    P_R = a .* P_M;
+    
+    p_r = berechne_P_R.(t,x,s,h,b);
+    
+    eps = 0.00001;
+    if maximum(abs.(P_R - p_r)) > eps
+		@warn "Deine Funktion zur Berechnung von P_R ist falsch! Korrigiere sie."
+    else 
+        println("Deine Formel scheint korrekt zu sein!")
+    end
+end
 
 
-
+    
+    
+    
+    
+    
+    
+    
+    
 end
 
 
