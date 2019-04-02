@@ -22,6 +22,7 @@ export makeplot
 export pruefe_e_strich
 export pruefe_a
 export pruefe_PR
+export pruefe_Pges
 
 function reflektion(alpha,gamma)
     if ~(alpha >= 0 && alpha <= pi)
@@ -417,6 +418,15 @@ function pruefe_PR(berechne_P_R)
     end
 end
 
+function pruefe_Pges(P_ges)
+    eps = 0.1;
+    P = 3.414529352822778e6;
+    if abs(P - P_ges) > eps
+		@warn "Deine Funktion zur Berechnung von P_ges ist falsch! Korrigiere sie."
+    else 
+        println("Die Leistung des Kraftwerkes beträgt P_ges = $(P) W = $(P/1000000) MW.")
+    end
+end
 
     
     
